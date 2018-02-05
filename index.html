@@ -99,7 +99,7 @@ d3.csv("population.csv", function(error, data) {
       month = month1;
 
   // Update the scale domains.
-  x.domain([month1 - 1, month1]);
+  x.domain([d3.max(data, function(d) {return d.venue; }), 0]);
   y.domain([0, d3.max(data, function(d) { return d.people; })]);
 
   // Produce a map from year and birthyear to [distributed, scanned].
