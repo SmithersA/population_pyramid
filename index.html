@@ -89,17 +89,17 @@ d3.csv("population.csv", function(error, data) {
   data.forEach(function(d) {
     d.people = +d.people;
     d.month = +d.month;
-    //d.age = +d.age;
+    d.age = d.age;
   });
 
   // Compute the extent of the data set in venue and month.years
-  var age1 = d3.max(data, function(d) { return d.age; }),
-      month0 = d3.min(data, function(d) { return d.month; }),
+  	//var age1 = d3.max(data, function(d) { return d.age; }),
+      var month0 = d3.min(data, function(d) { return d.month; }),
       month1 = d3.max(data, function(d) { return d.month; }),
       month = month1;
 
   // Update the scale domains.
-  x.domain([month1 - age1, month1]);
+  x.domain([month1 - 1, month1]);
   y.domain([0, d3.max(data, function(d) { return d.people; })]);
 
   // Produce a map from year and birthyear to [distributed, scanned].
