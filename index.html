@@ -64,7 +64,7 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("right")
     .tickSize(-width)
-    .tickFormat(function(d) { return Math.round(d / 1e3) + "K"; });
+    .tickFormat(function(d) { return Math.round(d / 1e6) + "M"; });
 
 // An SVG element with a bottom-right origin.
 var svg = d3.select("body").append("svg")
@@ -73,7 +73,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// A sliding container to hold the bars by month.year
+// A sliding container to hold the bars by birthyear.
 var birthyears = svg.append("g")
     .attr("class", "birthyears");
 
@@ -81,29 +81,31 @@ var birthyears = svg.append("g")
 var title = svg.append("text")
     .attr("class", "title")
     .attr("dy", ".71em")
-    .text(12.17);
+    .text(2000);
 
 d3.csv("population.csv", function(error, data) {
 
   // Convert strings to numbers.
   data.forEach(function(d) {
     d.people = +d.people;
-    d.month = +d.month;
-    //d.venue = d.venue;
+    d.year = +d.year;
+    d.age = +d.age;
   });
 
-  // Compute the extent of the data set in venue and month.years
-      var month0 = d3.min(data, function(d) { return d.month; }),
-      month1 = d3.max(data, function(d) { return d.month; }),
-      month = month1;
+  // Compute the extent of the data set in age and years.
+  var age1 = d3.max(data, function(d) { return d.age; }),
+      year0 = d3.min(data, function(d) { return d.year; }),
+      year1 = d3.max(data, function(d) { return d.year; }),
+      year = year1;
 
   // Update the scale domains.
-  x.domain([d3.min(data, function(d) {return d.month; }), 0]);
+  x.domain([year1 - age1, year1]);
   y.domain([0, d3.max(data, function(d) { return d.people; })]);
 
-  // Produce a map from year and birthyear to [distributed, scanned].
+  // Produce a map from year and birthyear to [male, female].
   data = d3.nest()
-      .key(function(d) { return d.month; })
+      .key(function(d) { return d.year; })
+      .key(function(d) { return d.year - d.age; })
       .rollup(function(v) { return v.map(function(d) { return d.people; }); })
       .map(data);
 
@@ -116,56 +118,56 @@ d3.csv("population.csv", function(error, data) {
     .filter(function(value) { return !value; })
       .classed("zero", true);
 
-  // Add labeled rects for each month.year (so that no enter or exit is required).
-  var monthyear = monthyears.selectAll(".birthyear")
-      .data(d3.range(month0, month1 + 1, 5))
+  // Add labeled rects for each birthyear (so that no enter or exit is required).
+  var birthyear = birthyears.selectAll(".birthyear")
+      .data(d3.range(year0 - age1, year1 + 1, 5))
     .enter().append("g")
       .attr("class", "birthyear")
-      .attr("transform", function(monthyear) { return "translate(" + x(monthyear) + ",0)"; });
+      .attr("transform", function(birthyear) { return "translate(" + x(birthyear) + ",0)"; });
 
   birthyear.selectAll("rect")
-      .data(function(monthyear) { return data[month][monthyear] || [0, 0]; })
+      .data(function(birthyear) { return data[year][birthyear] || [0, 0]; })
     .enter().append("rect")
       .attr("x", -barWidth / 2)
       .attr("width", barWidth)
       .attr("y", y)
       .attr("height", function(value) { return height - y(value); });
 
-  // Add labels to show month.year
+  // Add labels to show birthyear.
   birthyear.append("text")
       .attr("y", height - 4)
-      .text(function(monthyear) { return monthyear; });
+      .text(function(birthyear) { return birthyear; });
 
-  // Add labels to show venue (separate; not animated).
+  // Add labels to show age (separate; not animated).
   svg.selectAll(".age")
-      .data(d3.range(0, month1 + 1, 5))
+      .data(d3.range(0, age1 + 1, 5))
     .enter().append("text")
       .attr("class", "age")
-      .attr("x", function(month) { return x(month); })
+      .attr("x", function(age) { return x(year - age); })
       .attr("y", height + 4)
       .attr("dy", ".71em")
-      .text(function(venue) { return venue; });
+      .text(function(age) { return age; });
 
-  // Allow the arrow keys to change the displayed month.year
+  // Allow the arrow keys to change the displayed year.
   window.focus();
   d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
-      case 37: month = Math.max(month0, month - 1); break;
-      case 39: month = Math.min(month1, month + 1); break;
+      case 37: year = Math.max(year0, year - 10); break;
+      case 39: year = Math.min(year1, year + 10); break;
     }
     update();
   });
 
   function update() {
-    if (!(month in data)) return;
-    title.text(month);
+    if (!(year in data)) return;
+    title.text(year);
 
     birthyears.transition()
         .duration(750)
-        .attr("transform", "translate(" + (x(month1) - x(month)) + ",0)");
+        .attr("transform", "translate(" + (x(year1) - x(year)) + ",0)");
 
     birthyear.selectAll("rect")
-        .data(function(birthyear) { return data[month][birthyear] || [0, 0]; })
+        .data(function(birthyear) { return data[year][birthyear] || [0, 0]; })
       .transition()
         .duration(750)
         .attr("y", y)
