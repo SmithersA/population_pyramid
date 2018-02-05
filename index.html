@@ -89,7 +89,7 @@ d3.csv("population.csv", function(error, data) {
   data.forEach(function(d) {
     d.people = +d.people;
     d.month = +d.month;
-    d.age = d.age;
+    d.venue = d.venue;
   });
 
   // Compute the extent of the data set in venue and month.years
@@ -105,7 +105,7 @@ d3.csv("population.csv", function(error, data) {
   // Produce a map from year and birthyear to [distributed, scanned].
   data = d3.nest()
       .key(function(d) { return d.month; })
-      .key(function(d) { return d.month - d.age; })
+      .key(function(d) { return d.month - 1; })
       .rollup(function(v) { return v.map(function(d) { return d.people; }); })
       .map(data);
 
