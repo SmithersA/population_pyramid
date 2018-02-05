@@ -152,8 +152,8 @@ d3.csv("population.csv", function(error, data) {
   window.focus();
   d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
-      case 37: month = Math.max(month0, month - 0); break;
-      case 39: month = Math.min(month1, month + 0); break;
+      case 37: month = Math.max(month0, month - 1); break;
+      case 39: month = Math.min(month1, month + 1); break;
     }
     update();
   });
