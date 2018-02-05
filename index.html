@@ -93,7 +93,7 @@ d3.csv("population.csv", function(error, data) {
   });
 
   // Compute the extent of the data set in venue and month.years
-  	//var age1 = d3.max(data, function(d) { return d.age; }),
+  var age1 = d3.max(data, function(d) { return d.age; }),
       var month0 = d3.min(data, function(d) { return d.month; }),
       month1 = d3.max(data, function(d) { return d.month; }),
       month = month1;
