@@ -73,7 +73,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// A sliding container to hold the bars by birthyear.
+// A sliding container to hold the bars by month.year
 var birthyears = svg.append("g")
     .attr("class", "birthyears");
 
@@ -92,7 +92,7 @@ d3.csv("population.csv", function(error, data) {
     d.age = +d.age;
   });
 
-  // Compute the extent of the data set in age and years.
+  // Compute the extent of the data set in venue and month.years
   var age1 = d3.max(data, function(d) { return d.age; }),
       year0 = d3.min(data, function(d) { return d.year; }),
       year1 = d3.max(data, function(d) { return d.year; }),
@@ -102,7 +102,7 @@ d3.csv("population.csv", function(error, data) {
   x.domain([year1 - age1, year1]);
   y.domain([0, d3.max(data, function(d) { return d.people; })]);
 
-  // Produce a map from year and birthyear to [male, female].
+  // Produce a map from year and birthyear to [distributed, scanned].
   data = d3.nest()
       .key(function(d) { return d.year; })
       .key(function(d) { return d.year - d.age; })
@@ -118,7 +118,7 @@ d3.csv("population.csv", function(error, data) {
     .filter(function(value) { return !value; })
       .classed("zero", true);
 
-  // Add labeled rects for each birthyear (so that no enter or exit is required).
+  // Add labeled rects for each month.year (so that no enter or exit is required).
   var birthyear = birthyears.selectAll(".birthyear")
       .data(d3.range(year0 - age1, year1 + 1, 5))
     .enter().append("g")
@@ -133,12 +133,12 @@ d3.csv("population.csv", function(error, data) {
       .attr("y", y)
       .attr("height", function(value) { return height - y(value); });
 
-  // Add labels to show birthyear.
+  // Add labels to show month.year
   birthyear.append("text")
       .attr("y", height - 4)
       .text(function(birthyear) { return birthyear; });
 
-  // Add labels to show age (separate; not animated).
+  // Add labels to show venue (separate; not animated).
   svg.selectAll(".age")
       .data(d3.range(0, age1 + 1, 5))
     .enter().append("text")
@@ -148,7 +148,7 @@ d3.csv("population.csv", function(error, data) {
       .attr("dy", ".71em")
       .text(function(age) { return age; });
 
-  // Allow the arrow keys to change the displayed year.
+  // Allow the arrow keys to change the displayed month.year
   window.focus();
   d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
