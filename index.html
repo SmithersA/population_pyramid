@@ -89,23 +89,21 @@ d3.csv("population.csv", function(error, data) {
   data.forEach(function(d) {
     d.people = +d.people;
     d.month = +d.month;
-    d.venue = d.venue;
+    //d.venue = d.venue;
   });
 
   // Compute the extent of the data set in venue and month.years
-	var age1 = d3.max(data, function(d) { return d.month; }),
       var month0 = d3.min(data, function(d) { return d.month; }),
       month1 = d3.max(data, function(d) { return d.month; }),
       month = month1;
 
   // Update the scale domains.
-  x.domain([month1 - age1, month1]);		//([d3.min(data, function(d) {return d.month; }), 0]);
+  x.domain([d3.min(data, function(d) {return d.month; }), 0]);
   y.domain([0, d3.max(data, function(d) { return d.people; })]);
 
   // Produce a map from year and birthyear to [distributed, scanned].
   data = d3.nest()
       .key(function(d) { return d.month; })
-      .key(function(d) { return d.month - 10; })
       .rollup(function(v) { return v.map(function(d) { return d.people; }); })
       .map(data);
 
@@ -119,14 +117,14 @@ d3.csv("population.csv", function(error, data) {
       .classed("zero", true);
 
   // Add labeled rects for each month.year (so that no enter or exit is required).
-  var birthyear = birthyears.selectAll(".birthyear")
+  var monthyear = monthyears.selectAll(".birthyear")
       .data(d3.range(month0, month1 + 1, 5))
     .enter().append("g")
       .attr("class", "birthyear")
-      .attr("transform", function(birthyear) { return "translate(" + x(birthyear) + ",0)"; });
+      .attr("transform", function(monthyear) { return "translate(" + x(monthyear) + ",0)"; });
 
   birthyear.selectAll("rect")
-      .data(function(birthyear) { return data[month][birthyear] || [0, 0]; })
+      .data(function(monthyear) { return data[month][monthyear] || [0, 0]; })
     .enter().append("rect")
       .attr("x", -barWidth / 2)
       .attr("width", barWidth)
@@ -136,14 +134,14 @@ d3.csv("population.csv", function(error, data) {
   // Add labels to show month.year
   birthyear.append("text")
       .attr("y", height - 4)
-      .text(function(birthyear) { return birthyear; });
+      .text(function(monthyear) { return monthyear; });
 
   // Add labels to show venue (separate; not animated).
   svg.selectAll(".age")
-      .data(d3.range(0, venue1 + 1, 5))
+      .data(d3.range(0, month1 + 1, 5))
     .enter().append("text")
       .attr("class", "age")
-      .attr("x", function(venue) { return x(month - 1); })
+      .attr("x", function(month) { return x(month); })
       .attr("y", height + 4)
       .attr("dy", ".71em")
       .text(function(venue) { return venue; });
