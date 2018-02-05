@@ -93,7 +93,7 @@ d3.csv("population.csv", function(error, data) {
   });
 
   // Compute the extent of the data set in venue and month.years
-  var age1 = d3.max(data, function(d) { return d.age; }),
+  var venue1 = d3.max(data, function(d) { return d.venue; }),
       var month0 = d3.min(data, function(d) { return d.month; }),
       month1 = d3.max(data, function(d) { return d.month; }),
       month = month1;
@@ -140,13 +140,13 @@ d3.csv("population.csv", function(error, data) {
 
   // Add labels to show venue (separate; not animated).
   svg.selectAll(".age")
-      .data(d3.range(0, age1 + 1, 5))
+      .data(d3.range(0, venue1 + 1, 5))
     .enter().append("text")
       .attr("class", "age")
-      .attr("x", function(age) { return x(month - age); })
+      .attr("x", function(venue) { return x(month - 1); })
       .attr("y", height + 4)
       .attr("dy", ".71em")
-      .text(function(age) { return age; });
+      .text(function(venue) { return venue; });
 
   // Allow the arrow keys to change the displayed month.year
   window.focus();
