@@ -152,8 +152,8 @@ d3.csv("population.csv", function(error, data) {
   window.focus();
   d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
-      case 12: year = Math.max(year0, year - 1); break;
-      case 13: year = Math.min(year1, year + 1); break;
+      case 12: year = Math.max(year0, year - 0.01); break;
+      case 13: year = Math.min(year1, year + 0.01); break;
     }
     update();
   });
