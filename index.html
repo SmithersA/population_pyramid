@@ -134,9 +134,9 @@ d3.csv("population.csv", function(error, data) {
       .attr("height", function(value) { return height + y(value); });
 
   // Add labels to show birthyear.
-  birthyear.append("text")
+  /* birthyear.append("text")
       .attr("y", height - 4)
-      .text(function(birthyear) { return birthyear; });
+      .text(function(birthyear) { return birthyear; }); */
 
   // Add labels to show age (separate; not animated).
   svg.selectAll(".age")
@@ -152,8 +152,8 @@ d3.csv("population.csv", function(error, data) {
   window.focus();
   d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
-      case 13: year = Math.max(year0, year - 0.01); break;
-      case 14: year = Math.min(year1, year + 0.01); break;
+      case 12: year = Math.max(year0, year - 0.01); break;
+      case 13: year = Math.min(year1, year + 0.01); break;
     }
     update();
   });
