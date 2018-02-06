@@ -148,7 +148,7 @@ d3.csv("population.csv", function(error, data) {
       .attr("dy", ".71em")
       .text(function(age) { return age; });
 
-  // Allow the arrow keys to change the displayed year.
+  // Allow the arrow keys to change the displayed year in the top heading.
   window.focus();
   d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
