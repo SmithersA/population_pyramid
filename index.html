@@ -94,7 +94,7 @@ d3.csv("population.csv", function(error, data) {
 
   // Compute the extent of the data set in age and years.
   var age1 = d3.max(data, function(d) { return d.age; }),
-      year0 = 2016.10,
+      year0 = d3.max(data, function(d) { return d.year; }),
       year1 = d3.max(data, function(d) { return d.year; }),
       year = year1;
 
