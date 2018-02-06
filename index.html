@@ -130,7 +130,7 @@ d3.csv("population.csv", function(error, data) {
     .enter().append("rect")
       .attr("x", -barWidth / 2)
       .attr("width", barWidth)
-      .attr("y", -y)
+      .attr("y", y)
       .attr("height", function(value) { return height + y(value); });
 
   // Add labels to show birthyear.
@@ -170,7 +170,7 @@ d3.csv("population.csv", function(error, data) {
         .data(function(birthyear) { return data[year][birthyear] || [0, 0]; })
       .transition()
         .duration(750)
-        .attr("y", y)
+        .attr("y", -y)
         .attr("height", function(value) { return height - y(value); });
   }
 });
