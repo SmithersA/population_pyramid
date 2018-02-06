@@ -37,11 +37,11 @@ svg {
 
 rect {
   fill-opacity: .6;
-  fill: #e377c2;
+  fill: #ca6323;
 }
 
 rect:first-child {
-  fill: #1f77b4;
+  fill: #296b8b;
 }
 
 </style>
@@ -49,10 +49,10 @@ rect:first-child {
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script>
 
-var margin = {top: 20, right: 40, bottom: 30, left: 20},
+var margin = {top: 20, right: 40, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom,
-    barWidth = Math.floor(width / 9) - 1;
+    barWidth = Math.floor(width / 13) - 1;
 
 var x = d3.scale.linear()
     .range([barWidth / 2, width - barWidth / 2]);
@@ -120,7 +120,7 @@ d3.csv("population.csv", function(error, data) {
 
   // Add labeled rects for each birthyear (so that no enter or exit is required).
   var birthyear = birthyears.selectAll(".birthyear")
-      .data(d3.range(year0 - age1, year1 + 1, 3))
+      .data(d3.range(year0 - age1, year1 + 1, 1))
     .enter().append("g")
       .attr("class", "birthyear")
       .attr("transform", function(birthyear) { return "translate(" + x(birthyear) + ",0)"; });
@@ -140,7 +140,7 @@ d3.csv("population.csv", function(error, data) {
 
   // Add labels to show age (separate; not animated).
   svg.selectAll(".age")
-      .data(d3.range(0, age1 + 1, 1))
+      .data(d3.range(0, age1 + 1, 5))
     .enter().append("text")
       .attr("class", "age")
       .attr("x", function(age) { return x(year - age); })
