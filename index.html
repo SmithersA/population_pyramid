@@ -52,7 +52,7 @@ rect:first-child {
 var margin = {top: 20, right: 40, bottom: 30, left: 20},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom,
-    barWidth = Math.floor(width / 7) - 1;
+    barWidth = Math.floor(width / 9) - 1;
 
 var x = d3.scale.linear()
     .range([barWidth / 2, width - barWidth / 2]);
@@ -120,7 +120,7 @@ d3.csv("population.csv", function(error, data) {
 
   // Add labeled rects for each birthyear (so that no enter or exit is required).
   var birthyear = birthyears.selectAll(".birthyear")
-      .data(d3.range(year0 - age1, year1 + 1, 6))
+      .data(d3.range(year0 - age1, year1 + 1, 3))
     .enter().append("g")
       .attr("class", "birthyear")
       .attr("transform", function(birthyear) { return "translate(" + x(birthyear) + ",0)"; });
@@ -140,7 +140,7 @@ d3.csv("population.csv", function(error, data) {
 
   // Add labels to show age (separate; not animated).
   svg.selectAll(".age")
-      .data(d3.range(0, age1 + 1, 5))
+      .data(d3.range(0, age1 + 1, 1))
     .enter().append("text")
       .attr("class", "age")
       .attr("x", function(age) { return x(year - age); })
