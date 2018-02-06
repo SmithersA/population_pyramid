@@ -120,7 +120,7 @@ d3.csv("population.csv", function(error, data) {
 
   // Add labeled rects for each birthyear (so that no enter or exit is required).
   var birthyear = birthyears.selectAll(".birthyear")
-      .data(d3.range(year0 - age1, year1 + 1, 1))
+      .data(d3.range(year0 - age1, year1 + 1, .1))
     .enter().append("g")
       .attr("class", "birthyear")
       .attr("transform", function(birthyear) { return "translate(" + x(birthyear) + ",0)"; });
@@ -152,8 +152,8 @@ d3.csv("population.csv", function(error, data) {
   window.focus();
   d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
-      case 12: year = Math.max(year0, year - 0.01); break;
-      case 13: year = Math.min(year1, year + 0.01); break;
+      case 7: year = Math.max(year0, year - 0.01); break;
+      case 9: year = Math.min(year1, year + 0.01); break;
     }
     update();
   });
